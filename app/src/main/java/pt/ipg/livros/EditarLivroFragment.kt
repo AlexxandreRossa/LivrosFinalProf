@@ -15,7 +15,6 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import pt.ipg.livros.databinding.FragmentEditarLivroBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -34,11 +33,9 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = FragmentEditarLivroBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -99,7 +96,7 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         val categoriaId = binding.spinnerCategorias.selectedItemId
 
-        val data: Date
+        val data: Date?
         val df = SimpleDateFormat("dd-MM-yyyy")
         try {
             data = df.parse(binding.editTextDataPub.text.toString())
@@ -199,7 +196,9 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
      * @param loader The Loader that is being reset.
      */
     override fun onLoaderReset(loader: Loader<Cursor>) {
-        binding.spinnerCategorias.adapter = null
+        if (_binding != null) {
+            binding.spinnerCategorias.adapter = null
+        }
     }
 
     /**
@@ -223,7 +222,7 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
      * them to you through new calls here.  You should not monitor the
      * data yourself.  For example, if the data is a [android.database.Cursor]
      * and you place it in a [android.widget.CursorAdapter], use
-     * the [android.widget.CursorAdapter.CursorAdapter] constructor *without* passing
+     * the [android.widget.CursorAdapter] constructor *without* passing
      * in either [android.widget.CursorAdapter.FLAG_AUTO_REQUERY]
      * or [android.widget.CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER]
      * (that is, use 0 for the flags argument).  This prevents the CursorAdapter

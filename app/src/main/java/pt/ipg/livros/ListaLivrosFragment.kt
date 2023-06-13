@@ -16,11 +16,6 @@ import pt.ipg.livros.databinding.FragmentListaLivrosBinding
 
 private const val ID_LOADER_LIVROS = 0
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ListaLivrosFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ListaLivrosFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private var _binding: FragmentListaLivrosBinding? = null
 
@@ -46,7 +41,7 @@ class ListaLivrosFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentListaLivrosBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -114,7 +109,7 @@ class ListaLivrosFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
      * them to you through new calls here.  You should not monitor the
      * data yourself.  For example, if the data is a [android.database.Cursor]
      * and you place it in a [android.widget.CursorAdapter], use
-     * the [android.widget.CursorAdapter.CursorAdapter] constructor *without* passing
+     * the [android.widget.CursorAdapter] constructor *without* passing
      * in either [android.widget.CursorAdapter.FLAG_AUTO_REQUERY]
      * or [android.widget.CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER]
      * (that is, use 0 for the flags argument).  This prevents the CursorAdapter
@@ -151,7 +146,9 @@ class ListaLivrosFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
      * @param loader The Loader that is being reset.
      */
     override fun onLoaderReset(loader: Loader<Cursor>) {
-        adapterLivros!!.cursor = null
+        if (adapterLivros != null) {
+            adapterLivros!!.cursor = null
+        }
     }
 
     fun processaOpcaoMenu(item: MenuItem) : Boolean {
