@@ -3,7 +3,6 @@ package pt.ipg.livros
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -16,15 +15,14 @@ import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.navigation.fragment.findNavController
 import pt.ipg.livros.databinding.FragmentEditarLivroBinding
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 
 private const val ID_LOADER_CATEGORIAS = 0
 
 class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private var livro: Livro?= null
     private var _binding: FragmentEditarLivroBinding? = null
+    private var dataPub : Calendar? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -41,6 +39,11 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.calendarViewDataPub.setOnDateChangeListener { calendarView, year, month, dayOfMonth ->
+            if (dataPub == null) dataPub = Calendar.getInstance()
+            dataPub!!.set(year, month, dayOfMonth)
+        }
+
         val loader = LoaderManager.getInstance(this)
         loader.initLoader(ID_LOADER_CATEGORIAS, null, this)
 
@@ -56,9 +59,8 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             binding.editTextTitulo.setText(livro.titulo)
             binding.editTextIsbn.setText(livro.isbn)
             if (livro.dataPublicacao != null) {
-                binding.editTextDataPub.setText(
-                    DateFormat.format("yyyy-MM-dd", livro.dataPublicacao)
-                )
+                dataPub = livro.dataPublicacao
+                binding.calendarViewDataPub.date = dataPub!!.timeInMillis
             }
         } else {
             activity.atualizaTitulo(R.string.novo_livro_label)
@@ -99,28 +101,14 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         }
 
         val categoriaId = binding.spinnerCategorias.selectedItemId
-
-        val data: Date?
-        val df = SimpleDateFormat("dd-MM-yyyy")
-        try {
-            data = df.parse(binding.editTextDataPub.text.toString())
-        } catch (e: Exception) {
-            binding.editTextDataPub.error = getString(R.string.data_invalida)
-            binding.editTextDataPub.requestFocus()
-            return
-        }
-
         val isbn = binding.editTextIsbn.text.toString()
-
-        val calendario = Calendar.getInstance()
-        calendario.time = data
 
         if (livro == null) {
             val livro = Livro(
                 titulo,
                 Categoria("?", categoriaId),
                 isbn,
-                calendario
+                dataPub
             )
 
             insereLivro(livro)
@@ -129,7 +117,7 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             livro.titulo = titulo
             livro.categoria = Categoria("?", categoriaId)
             livro.isbn = isbn
-            livro.dataPublicacao = calendario
+            livro.dataPublicacao = dataPub
 
             alteraLivro(livro)
         }
