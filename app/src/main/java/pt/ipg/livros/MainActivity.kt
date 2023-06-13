@@ -77,4 +77,6 @@ class MainActivity : AppCompatActivity() {
     fun mostraOpcaoMenu(idOpcao: Int, mostrar: Boolean) {
         menu.findItem(idOpcao).setVisible(mostrar)
     }
+
+    fun atualizaTitulo(label: Int) = binding.toolbar.setTitle(label)
 }

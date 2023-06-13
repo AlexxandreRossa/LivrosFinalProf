@@ -3,7 +3,7 @@
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="menu_principal_label">Menu principal</string>
-    <string name="sobre_fragment_label">Sobre ...</string>
+    <string name="sobre_fragment_label">Sobre …</string>
     <string name="previous">Voltar</string>
 
     <string name="sobre_app">
@@ -22,6 +22,7 @@ Noel Lopes
     <string name="editar">Editar</string>
     <string name="eliminar">Eliminar</string>
     <string name="novo_livro_label">Novo livro</string>
+    <string name="editar_livro_label">Editar livro</string>
     <string name="titulo">Título</string>
     <string name="isbn">ISBN</string>
     <string name="categoria">Categoria</string>

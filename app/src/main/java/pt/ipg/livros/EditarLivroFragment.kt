@@ -51,6 +51,8 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         val livro = EditarLivroFragmentArgs.fromBundle(requireArguments()).livro
 
         if (livro != null) {
+            activity.atualizaTitulo(R.string.editar_livro_label)
+
             binding.editTextTitulo.setText(livro.titulo)
             binding.editTextIsbn.setText(livro.isbn)
             if (livro.dataPublicacao != null) {
@@ -58,6 +60,8 @@ class EditarLivroFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                     DateFormat.format("yyyy-MM-dd", livro.dataPublicacao)
                 )
             }
+        } else {
+            activity.atualizaTitulo(R.string.novo_livro_label)
         }
 
         this.livro = livro
